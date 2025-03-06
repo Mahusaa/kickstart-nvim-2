@@ -212,6 +212,24 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = vim.api.nvim_create_augroup('custom-term-open', {
+    clear = true,
+  }),
+  callback = function()
+    vim.opt.number = false
+    vim.opt.relativenumber = false
+  end,
+})
+
+vim.keymap.set('n', '<space>st', function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd 'J'
+  vim.api.nvim_win_set_height(0, 5)
+  vim.cmd.startinsert()
+end)
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -781,55 +799,57 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
+    'rose-pine/neovim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'rose-pine'
+      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
   },
-  {
-    -- Add the transparent plugin
-    'xiyaowong/nvim-transparent',
-    config = function()
-      require('transparent').setup {
-        groups = { -- Default groups
-          'Normal',
-          'NormalNC',
-          'Comment',
-          'Constant',
-          'Special',
-          'Identifier',
-          'Statement',
-          'PreProc',
-          'Type',
-          'Underlined',
-          'Todo',
-          'String',
-          'Function',
-          'Conditional',
-          'Repeat',
-          'Operator',
-          'Structure',
-          'LineNr',
-          'NonText',
-          'SignColumn',
-          'CursorLine',
-          'CursorLineNr',
-          'StatusLine',
-          'StatusLineNC',
-          'EndOfBuffer',
-        },
-        extra_groups = {}, -- Additional groups that should be cleared
-        exclude_groups = {}, -- Groups you don't want to clear
-      }
-    end,
-  },
+  -- {
+  --   -- Add the transparent plugin
+  --   'xiyaowong/nvim-transparent',
+  --   config = function()
+  --     require('transparent').setup {
+  --       groups = { -- Default groups
+  --         'Normal',
+  --         'NormalNC',
+  --         'Comment',
+  --         'Constant',
+  --         'Special',
+  --         'Identifier',
+  --         'Statement',
+  --         'PreProc',
+  --         'Type',
+  --         'Underlined',
+  --         'Todo',
+  --         'String',
+  --         'Function',
+  --         'Conditional',
+  --         'Repeat',
+  --         'Operator',
+  --         'Structure',
+  --         'LineNr',
+  --         'NonText',
+  --         'SignColumn',
+  --         'CursorLine',
+  --         'CursorLineNr',
+  --         'StatusLine',
+  --         'StatusLineNC',
+  --         'EndOfBuffer',
+  --       },
+  --       extra_groups = {}, -- Additional groups that should be cleared
+  --       exclude_groups = {}, -- Groups you don't want to clear
+  --     }
+  --   end,
+  -- },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -947,6 +967,7 @@ require('lazy').setup({
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.oil',
   require 'kickstart.plugins.lualine',
+  require 'kickstart.plugins.vim-tmux-navigator',
 
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 

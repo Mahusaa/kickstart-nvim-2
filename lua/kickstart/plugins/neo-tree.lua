@@ -11,30 +11,7 @@ return {
   },
   cmd = 'Neotree',
   keys = {
-    { '\\', ':Neotree reveal<CR>', { desc = 'NeoTree reveal' } },
-  },
-  opts = {
-    filesystem = {
-      window = {
-        position = 'right',
-        width = 30,
-        mappings = {
-          ['\\'] = 'close_window',
-        },
-      },
-      filtered_items = {
-        visible = true,
-        show_hidden_count = true,
-        hide_dotfiles = false,
-        hide_gitignored = false,
-        hide_by_name = {
-          -- '.git',
-          -- '.DS_Store',
-          -- 'thumbs.db',
-        },
-        never_show = {},
-      },
-    },
+    { '\\', ':Neotree reveal<CR>' },
   },
   config = function()
     require('neo-tree').setup {
@@ -45,6 +22,9 @@ return {
           mappings = {
             ['\\'] = 'close_window',
           },
+        },
+        follow_current_file = {
+          enabled = true,
         },
         filtered_items = {
           visible = true,
@@ -57,9 +37,6 @@ return {
             -- 'thumbs.db',
           },
           never_show = {},
-          follow_current_file = {
-            enabled = true,
-          },
         },
       },
     }
